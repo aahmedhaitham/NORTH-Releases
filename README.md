@@ -4,7 +4,7 @@
 
 NORTH is a Windows security console for investigating activity on your PC. It opens to local data without an account, server address, or access key.
 
-[Download the Windows x64 preview](https://github.com/aahmedhaitham/NORTH-Releases/releases/tag/v0.2.0-preview.1) · [MIT License](LICENSE)
+[Download the Windows x64 preview](https://github.com/aahmedhaitham/NORTH-Releases/releases/tag/v0.2.0-preview.1) · [MIT License](LICENSE) · [Privacy policy](PRIVACY.md)
 
 - **ATLAS** shows local interfaces, observed devices, and network connections.
 - **IRIS** lets you inspect recent Windows events when Sysmon is installed and readable.

@@ -109,6 +109,14 @@ export function Network({ endpoint, openCase, demo, readOnly }: {
   const [reviewError, setReviewError] = useState(false);
   const query = search.trim().toLowerCase();
   const fits = (...values: string[]) => values.some((value) => value.toLowerCase().includes(query));
+  const localDevice = inventory?.local_device;
+  const adapters = new Map<string, Set<string>>();
+  for (const { interface: name, address } of localDevice?.addresses ?? []) {
+    const addresses = adapters.get(name) ?? new Set<string>();
+    addresses.add(address);
+    adapters.set(name, addresses);
+  }
+  const matchingAdapters = [...adapters].filter(([name, addresses]) => fits(name, localDevice?.host ?? '', ...addresses));
   const hosts = new Map(inventory?.assets.map((asset) => [asset.id, asset.host]));
   const matchingHosts = inventory?.assets.filter((asset) => fits(asset.host)) ?? [];
   const matchingLinks = inventory?.links.filter((link) => fits(link.address, hosts.get(link.asset_id) ?? '')) ?? [];
@@ -187,14 +195,16 @@ export function Network({ endpoint, openCase, demo, readOnly }: {
       </label>
     </header>
     {fetchError && <p role="status">The telemetry inventory is temporarily unavailable.</p>}
-    {inventory?.local_device && <section className="panel">
+    {localDevice && <section className="panel">
       <h2>This computer</h2>
-      <strong>{inventory.local_device.host}</strong>
-      <ul className="network-list">{inventory.local_device.addresses
-        .filter((item) => fits(item.interface, item.address, inventory.local_device!.host))
-        .map((item) => <li key={item.interface + '/' + item.address}>
-          <strong>{item.interface}</strong><small>{item.address}</small>
-        </li>)}</ul>
+      <p>{localDevice.host} · {adapters.size} {adapters.size === 1 ? 'network adapter' : 'network adapters'}</p>
+      <ul className="network-list">{matchingAdapters.map(([name, addresses]) => <li key={name}>
+        <strong>{name}</strong>
+        <ul className="adapter-addresses">{[...addresses].sort((a, b) =>
+          Number(a.includes(':')) - Number(b.includes(':')) || a.localeCompare(b),
+        ).map((address) => <li key={address}><small>{address.includes(':') ? 'IPv6' : 'IPv4'} <code>{address}</code></small></li>)}</ul>
+      </li>)}</ul>
+      {!matchingAdapters.length && <p>{query ? 'No local adapters match this search.' : 'No network adapters with addresses were found.'}</p>}
     </section>}
     {watch && (watch.baseline_at || collector?.state === 'starting') && <section className="panel">
       <h2>Newly observed devices</h2>
