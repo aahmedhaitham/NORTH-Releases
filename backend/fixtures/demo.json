@@ -1,0 +1,61 @@
+[
+  {
+    "agent": {
+      "id": "001",
+      "name": "WIN-LAB-01"
+    },
+    "data": {
+      "win": {
+        "system": {
+          "eventID": "1",
+          "eventRecordID": "1",
+          "systemTime": "2026-01-15T10:00:01Z"
+        },
+        "eventdata": {
+          "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "processGuid": "{00000000-0000-0000-0000-000000000001}"
+        }
+      }
+    }
+  },
+  {
+    "agent": {
+      "id": "001",
+      "name": "WIN-LAB-01"
+    },
+    "data": {
+      "win": {
+        "system": {
+          "eventID": "3",
+          "eventRecordID": "2",
+          "systemTime": "2026-01-15T10:00:02Z"
+        },
+        "eventdata": {
+          "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "processGuid": "{00000000-0000-0000-0000-000000000001}",
+          "destinationIp": "192.0.2.42"
+        }
+      }
+    }
+  },
+  {
+    "agent": {
+      "id": "001",
+      "name": "WIN-LAB-01"
+    },
+    "data": {
+      "win": {
+        "system": {
+          "eventID": "11",
+          "eventRecordID": "3",
+          "systemTime": "2026-01-15T10:00:03Z"
+        },
+        "eventdata": {
+          "image": "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe",
+          "processGuid": "{00000000-0000-0000-0000-000000000001}",
+          "targetFilename": "C:\\NorthLab\\inventory-demo.ps1"
+        }
+      }
+    }
+  }
+]

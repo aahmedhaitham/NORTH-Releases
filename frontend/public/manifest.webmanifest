@@ -1,0 +1,15 @@
+{
+  "id": "/",
+  "name": "NORTH Security Console",
+  "short_name": "NORTH",
+  "description": "Monitor devices, search events, and reconstruct incidents.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0c1018",
+  "theme_color": "#0c1018",
+  "icons": [
+    {"src": "/icons/north-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any"},
+    {"src": "/icons/north-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any"}
+  ]
+}

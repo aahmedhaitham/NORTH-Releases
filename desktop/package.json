@@ -1,0 +1,34 @@
+{
+  "name": "north-desktop",
+  "version": "0.2.0",
+  "private": true,
+  "description": "NORTH Cloud desktop client",
+  "author": "NORTH",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "npm run build:ui && electron .",
+    "test": "node --test *.test.cjs",
+    "build:ui": "npm --prefix ../frontend run build -- --mode cloud --outDir ../desktop/ui --emptyOutDir && node write-default.cjs",
+    "package:windows": "npm run build:ui && electron-builder --win portable --x64 --publish never",
+    "package:installer": "npm run build:ui && electron-builder --win nsis --x64 --publish never"
+  },
+  "devDependencies": {
+    "electron": "45.5.0",
+    "electron-builder": "26.18.0"
+  },
+  "build": {
+    "appId": "app.north.console",
+    "productName": "NORTH",
+    "artifactName": "NORTH-Desktop-Windows-x64.exe",
+    "files": ["main.cjs", "workspace.cjs", "cloud-proxy.cjs", "local-workspace.cjs", "device-history.cjs", "preload.cjs", "setup.html", "setup.js", "setup.css", "icons/north.ico"],
+    "extraResources": [
+      {"from": "ui", "to": "north-ui"},
+      {"from": "../tools", "to": "north-tools", "filter": ["Export-NorthNeighbors.ps1", "Read-NorthSysmon.ps1", "SysmonFormat.ps1"]}
+    ],
+    "nsis": {"artifactName": "NORTH-Setup-Windows-x64.exe"},
+    "win": {
+      "icon": "icons/north.ico",
+      "target": "portable"
+    }
+  }
+}

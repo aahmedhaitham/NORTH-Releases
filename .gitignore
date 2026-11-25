@@ -1,0 +1,35 @@
+# Local configuration and audit
+.env
+.env.*
+!.env.example
+LOCAL-AUDIT.md
+.north-launcher/
+cloud/wrangler.jsonc
+cloud/wrangler.ai.local.jsonc
+.wrangler/
+cloud/.dev.vars
+
+# Dependencies and build output
+.venv/
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+desktop/ui/
+
+# Local models, VM disks, and raw telemetry
+.ollama/
+models/
+*.gguf
+*.vmdk
+*.vdi
+*.vhd*
+*.vmem
+*.ova
+*.ovf
+*.evtx
+*.log
+raw-logs/
+*-journal.jsonl
+*.sqlite3
+*.sqlite3-*

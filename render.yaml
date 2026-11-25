@@ -1,0 +1,6 @@
+services:
+  - type: web
+    name: north-investigation-console
+    runtime: docker
+    plan: free
+    healthCheckPath: /api/health

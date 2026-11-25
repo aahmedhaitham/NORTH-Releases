@@ -1,0 +1,64 @@
+name: Build NORTH for Windows
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: windows-2025
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "26"
+      - name: Test the desktop client
+        working-directory: desktop
+        run: npm test
+      - name: Package Windows downloads
+        run: |
+          npm --prefix frontend ci
+          npm --prefix desktop ci
+          npm --prefix desktop run package:windows
+          npm --prefix desktop run package:installer
+      - name: Smoke test first launch from the installer
+        shell: pwsh
+        run: |
+          $installDir = Join-Path $env:RUNNER_TEMP 'north-install-smoke'
+          $installer = (Resolve-Path 'desktop/dist/NORTH-Setup-Windows-x64.exe').Path
+          $setup = Start-Process -FilePath $installer -ArgumentList "/S /D=$installDir" -Wait -PassThru
+          if ($setup.ExitCode -ne 0) { throw "Installer failed with exit code $($setup.ExitCode)." }
+          $app = Start-Process -FilePath (Join-Path $installDir 'NORTH.exe') -PassThru
+          try {
+            $deadline = [DateTime]::UtcNow.AddSeconds(45)
+            do {
+              Start-Sleep -Milliseconds 500
+              $app.Refresh()
+              if ($app.HasExited) { throw 'NORTH closed before opening its dashboard.' }
+              if ($app.MainWindowTitle -eq 'NORTH | This computer') { break }
+            } while ([DateTime]::UtcNow -lt $deadline)
+            if ($app.MainWindowTitle -ne 'NORTH | This computer') {
+              throw "Expected the local dashboard. Last window title was '$($app.MainWindowTitle)'."
+            }
+          } finally {
+            if (!$app.HasExited) { Stop-Process -Id $app.Id }
+          }
+      - name: Write download checksums
+        shell: pwsh
+        run: |
+          $downloads = @('NORTH-Desktop-Windows-x64.exe', 'NORTH-Setup-Windows-x64.exe')
+          $downloads | ForEach-Object {
+            $digest = (Get-FileHash -Algorithm SHA256 -LiteralPath "desktop/dist/$_").Hash.ToLowerInvariant()
+            "$digest  $_"
+          } | Set-Content -Encoding ascii desktop/dist/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NORTH-Windows-x64
+          path: |
+            desktop/dist/NORTH-Desktop-Windows-x64.exe
+            desktop/dist/NORTH-Setup-Windows-x64.exe
+            desktop/dist/SHA256SUMS.txt
+          if-no-files-found: error

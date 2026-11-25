@@ -1,0 +1,10 @@
+<Sysmon schemaversion="4.82">
+  <EventFiltering>
+    <ProcessCreate onmatch="include">
+      <CommandLine condition="contains">north-telemetry-</CommandLine>
+    </ProcessCreate>
+    <FileCreate onmatch="include">
+      <TargetFilename condition="contains">\raw-logs\north-telemetry-</TargetFilename>
+    </FileCreate>
+  </EventFiltering>
+</Sysmon>

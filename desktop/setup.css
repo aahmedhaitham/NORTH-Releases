@@ -1,0 +1,9 @@
+:root { color-scheme: dark; color: #e9edf5; background: #0c1018; font: 16px "Segoe UI", sans-serif; }
+main { margin: 2rem auto; width: min(31rem, calc(100% - 3rem)); }
+main > strong { color: #73e1c2; letter-spacing: .2em; }
+h1 { margin: .55rem 0; }
+p { color: #abb8ca; }
+label { display: grid; gap: .45rem; margin: 1.2rem 0 .8rem; }
+input, button { font: inherit; padding: .55rem .75rem; color: inherit; background: #202d3e; border: 1px solid #355364; border-radius: .45rem; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid #73e1c2; outline-offset: 3px; }
